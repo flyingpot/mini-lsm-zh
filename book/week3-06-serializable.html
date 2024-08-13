@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>可序列化快照隔离 - mini-lsm-zh</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="00-preface.html">前言</a></li><li class="chapter-item expanded affix "><a href="00-overview.html">Mini-LSM概述</a></li><li class="chapter-item expanded affix "><a href="00-get-started.html">环境设置</a></li><li class="chapter-item expanded "><a href="week1-overview.html"><strong aria-hidden="true">1.</strong> 第一周概述：Mini-LSM</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="week1-01-memtable.html"><strong aria-hidden="true">1.1.</strong> Memtable</a></li><li class="chapter-item expanded "><a href="week1-02-merge-iterator.html"><strong aria-hidden="true">1.2.</strong> 合并迭代器</a></li><li class="chapter-item expanded "><a href="week1-03-block.html"><strong aria-hidden="true">1.3.</strong> 块</a></li><li class="chapter-item expanded "><a href="week1-04-sst.html"><strong aria-hidden="true">1.4.</strong> 排序字符串表（SST）</a></li><li class="chapter-item expanded "><a href="week1-05-read-path.html"><strong aria-hidden="true">1.5.</strong> 读路径</a></li><li class="chapter-item expanded "><a href="week1-06-write-path.html"><strong aria-hidden="true">1.6.</strong> 写路径</a></li><li class="chapter-item expanded "><a href="week1-07-sst-optimizations.html"><strong aria-hidden="true">1.7.</strong> 小贴士：SST优化</a></li></ol></li><li class="chapter-item expanded "><a href="week2-overview.html"><strong aria-hidden="true">2.</strong> 第二周概述：压缩与持久化</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="week2-01-compaction.html"><strong aria-hidden="true">2.1.</strong> 压缩实现</a></li><li class="chapter-item expanded "><a href="week2-02-simple.html"><strong aria-hidden="true">2.2.</strong> 简单压缩策略</a></li><li class="chapter-item expanded "><a href="week2-03-tiered.html"><strong aria-hidden="true">2.3.</strong> 分层压缩策略</a></li><li class="chapter-item expanded "><a href="week2-04-leveled.html"><strong aria-hidden="true">2.4.</strong> 层级压缩策略</a></li><li class="chapter-item expanded "><a href="week2-05-manifest.html"><strong aria-hidden="true">2.5.</strong> 清单</a></li><li class="chapter-item expanded "><a href="week2-06-wal.html"><strong aria-hidden="true">2.6.</strong> 预写日志（WAL）</a></li><li class="chapter-item expanded "><a href="week2-07-snacks.html"><strong aria-hidden="true">2.7.</strong> 小贴士：批量写入与校验和</a></li></ol></li><li class="chapter-item expanded "><a href="week3-overview.html"><strong aria-hidden="true">3.</strong> 第三周概述：MVCC</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="week3-01-ts-key-refactor.html"><strong aria-hidden="true">3.1.</strong> 时间戳编码 + 重构</a></li><li class="chapter-item expanded "><a href="week3-02-snapshot-read-part-1.html"><strong aria-hidden="true">3.2.</strong> 快照 - Memtables与时间戳</a></li><li class="chapter-item expanded "><a href="week3-03-snapshot-read-part-2.html"><strong aria-hidden="true">3.3.</strong> 快照 - 事务API</a></li><li class="chapter-item expanded "><a href="week3-04-watermark.html"><strong aria-hidden="true">3.4.</strong> 水印与GC</a></li><li class="chapter-item expanded "><a href="week3-05-txn-occ.html"><strong aria-hidden="true">3.5.</strong> 事务与OCC</a></li><li class="chapter-item expanded "><a href="week3-06-serializable.html" class="active"><strong aria-hidden="true">3.6.</strong> 可序列化快照隔离</a></li><li class="chapter-item expanded "><a href="week3-07-compaction-filter.html"><strong aria-hidden="true">3.7.</strong> 小贴士：压缩过滤器</a></li></ol></li><li class="chapter-item expanded "><a href="week4-overview.html"><strong aria-hidden="true">4.</strong> 余生（待定）</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">已废弃的Mini-LSM v1</li><li class="chapter-item expanded "><a href="00-v1.html"><strong aria-hidden="true">5.</strong> 概述</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-block.html"><strong aria-hidden="true">5.1.</strong> 在小块中存储键值对</a></li><li class="chapter-item expanded "><a href="02-sst.html"><strong aria-hidden="true">5.2.</strong> 并将其制成SST</a></li><li class="chapter-item expanded "><a href="03-memtable.html"><strong aria-hidden="true">5.3.</strong> 现在是时候合并所有内容了</a></li><li class="chapter-item expanded "><a href="04-engine.html"><strong aria-hidden="true">5.4.</strong> 引擎启动</a></li><li class="chapter-item expanded "><a href="05-compaction.html"><strong aria-hidden="true">5.5.</strong> 让我们在后台做些什么</a></li><li class="chapter-item expanded "><a href="06-recovery.html"><strong aria-hidden="true">5.6.</strong> 系统崩溃时要小心</a></li><li class="chapter-item expanded "><a href="07-bloom-filter.html"><strong aria-hidden="true">5.7.</strong> 一个好的布隆过滤器让生活更轻松</a></li><li class="chapter-item expanded "><a href="08-key-compression.html"><strong aria-hidden="true">5.8.</strong> 节省一些空间，希望如此</a></li><li class="chapter-item expanded "><a href="09-whats-next.html"><strong aria-hidden="true">5.9.</strong> 下一步是什么</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">mini-lsm-zh</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="部分可序列化快照隔离"><a class="header" href="#部分可序列化快照隔离">(部分)可序列化快照隔离</a></h1>
+<p>现在，我们将在事务提交时添加一个冲突检测算法，以便使引擎具有一定程度的可序列化性。</p>
+<p>要运行测试用例，</p>
+<pre><code>cargo x copy-test --week 3 --day 6
+cargo x scheck
+</code></pre>
+<p>让我们通过一个可序列化的例子来理解。假设我们在引擎中有两个事务：</p>
+<pre><code>txn1: put("key1", get("key2"))
+txn2: put("key2", get("key1"))
+</code></pre>
+<p>数据库的初始状态是 <code>key1=1, key2=2</code>。可序列化意味着执行结果与按某种顺序依次执行事务的结果相同。如果我们先执行 txn1 再执行 txn2，我们将得到 <code>key1=2, key2=2</code>。如果我们先执行 txn2 再执行 txn1，我们将得到 <code>key1=1, key2=1</code>。</p>
+<p>然而，按照我们当前的实现，如果这两个事务的执行重叠：</p>
+<pre><code>txn1: get key2 &lt;- 2
+txn2: get key1 &lt;- 1
+txn1: put key1=2, commit
+txn2: put key2=1, commit
+</code></pre>
+<p>我们将得到 <code>key1=2, key2=1</code>。这无法通过这两个事务的串行执行产生。这种现象称为写偏斜。</p>
+<p>通过可序列化验证，我们可以确保对数据库的修改对应于某个串行执行顺序，因此用户可以在系统上运行一些需要可序列化执行的关键工作负载。例如，如果用户在 Mini-LSM 上运行银行转账工作负载，他们期望任何时候的总金额保持不变。没有可序列化检查，我们无法保证这一不变性得到维持。</p>
+<p>一种可序列化验证技术是记录系统中每个事务的读集和写集。我们在提交事务之前进行验证（乐观并发控制）。如果事务的读集与在其读取时间戳之后提交的任何事务重叠，那么我们验证失败，并中止该事务。</p>
+<p>回到上面的例子，如果我们有 txn1 和 txn2 都在时间戳 = 1 开始。</p>
+<pre><code>txn1: get key2 &lt;- 2
+txn2: get key1 &lt;- 1
+txn1: put key1=2, commit ts = 2
+txn2: put key2=1, start serializable verification
+</code></pre>
+<p>当我们验证 txn2 时，我们将遍历所有在其预期提交时间戳之前且在其读取时间戳之后开始的事务（在这种情况下，1 &lt; ts &lt; 3）。唯一满足条件的事务是 txn1。txn1 的写集是 <code>key1</code>，txn2 的读集是 <code>key1</code>。由于它们重叠，我们应该中止 txn2。</p>
+<h2 id="任务-1跟踪-get-和-write-set-中的读集"><a class="header" href="#任务-1跟踪-get-和-write-set-中的读集">任务 1：跟踪 Get 和 Write Set 中的读集</a></h2>
+<p>在这个任务中，你需要修改：</p>
+<pre><code>src/mvcc/txn.rs
+src/mvcc.rs
+</code></pre>
+<p>当调用 <code>get</code> 时，你应该将键添加到事务的读集中。在我们的实现中，我们存储键的哈希值，以减少内存使用并加快读集的探测速度，尽管这可能会导致两个键具有相同哈希时的假阳性。你可以使用 <code>farmhash::hash32</code> 为键生成哈希。请注意，即使 <code>get</code> 返回一个未找到的键，该键仍应在读集中跟踪。</p>
+<p>在 <code>LsmMvccInner::new_txn</code> 中，如果 <code>serializable=true</code>，你应该为事务创建一个空的读/写集。</p>
+<h2 id="任务-2在-scan-中跟踪读集"><a class="header" href="#任务-2在-scan-中跟踪读集">任务 2：在 Scan 中跟踪读集</a></h2>
+<p>在这个任务中，你需要修改：</p>
+<pre><code>src/mvcc/txn.rs
+</code></pre>
+<p>在本教程中，我们仅保证 <code>get</code> 请求的完全可序列化性。你仍然需要跟踪扫描的读集，但在某些特定情况下，你可能仍会得到不可序列化的结果。</p>
+<p>为了理解为什么这很困难，让我们通过以下例子来说明。</p>
+<pre><code>txn1: put("key1", len(scan(..)))
+txn2: put("key2", len(scan(..)))
+</code></pre>
+<p>如果数据库以初始状态 <code>a=1,b=2</code> 开始，我们应该得到 <code>a=1,b=2,key1=2,key2=3</code> 或 <code>a=1,b=2,key1=3,key2=2</code>。然而，如果事务执行如下：</p>
+<pre><code>txn1: len(scan(..)) = 2
+txn2: len(scan(..)) = 2
+txn1: put key1 = 2, commit, read set = {a, b}, write set = {key1}
+txn2: put key2 = 2, commit, read set = {a, b}, write set = {key2}
+</code></pre>
+<p>这通过了我们的可序列化验证，并且不对应于任何串行执行顺序！因此，一个完全有效的可序列化验证需要跟踪键范围，并且仅在调用 <code>get</code> 时使用键哈希可以加速可序列化检查。请参阅奖励任务，了解如何正确实现可序列化检查。</p>
+<h2 id="任务-3引擎接口和可序列化验证"><a class="header" href="#任务-3引擎接口和可序列化验证">任务 3：引擎接口和可序列化验证</a></h2>
+<p>在这个任务中，你需要修改：</p>
+<pre><code>src/mvcc/txn.rs
+src/lsm_storage.rs
+</code></pre>
+<p>现在，我们可以继续在提交阶段实现验证。每次处理事务提交时，你应该获取 <code>commit_lock</code>。这确保只有一个事务进入事务验证和提交阶段。</p>
+<p>你需要遍历所有提交时间戳在范围 <code>(read_ts, expected_commit_ts)</code>（排除边界）内的事务，并查看当前事务的读集是否与任何满足条件的事务的写集重叠。如果我们能提交事务，提交一个写批处理，并将该事务的写集插入到 <code>self.inner.mvcc().committed_txns</code> 中，其中键是提交时间戳。</p>
+<p>如果 <code>write_set</code> 为空，你可以跳过检查。只读事务总是可以提交的。</p>
+<p>你还应该修改 <code>LsmStorageInner</code> 中的 <code>put</code>、<code>delete</code> 和 <code>write_batch</code> 接口。我们建议你定义一个辅助函数 <code>write_batch_inner</code> 以处理写批处理。如果 <code>options.serializable = true</code>，<code>put</code>、<code>delete</code> 和面向用户的 <code>write_batch</code> 应该创建一个事务而不是直接创建一个写批处理。你的写批处理辅助函数还应该返回一个 <code>u64</code> 提交时间戳，以便 <code>Transaction::Commit</code> 可以正确地将提交的事务数据存储到 MVCC 结构中。</p>
+<h2 id="任务-4垃圾回收"><a class="header" href="#任务-4垃圾回收">任务 4：垃圾回收</a></h2>
+<p>在这个任务中，你需要修改：</p>
+<pre><code>src/mvcc/txn.rs
+</code></pre>
+<p>当你提交一个事务时，你也可以清理提交的事务映射，以移除所有低于水印的事务，因为它们不会参与任何未来的可序列化验证。</p>
+<h2 id="测试你的理解"><a class="header" href="#测试你的理解">测试你的理解</a></h2>
+<ul>
+<li>如果你有一些构建关系数据库的经验，你可能会考虑以下问题：假设我们基于 Mini-LSM 构建一个数据库，其中我们将关系表中的每一行存储为一个键值对（键：主键，值：序列化行）并启用可序列化验证，数据库系统是否直接获得了 ANSI 可序列化隔离级别的能力？为什么或为什么不？</li>
+<li>我们在这里实现的是实际上是写快照隔离（参见 <a href="https://dl.acm.org/doi/abs/10.1145/2168836.2168853">A critique of snapshot isolation</a>），它保证了可序列化。是否存在执行是可序列化的，但会被写快照隔离验证拒绝的情况？</li>
+<li>有些数据库声称它们通过仅跟踪 gets 和 scans 中访问的键（而不是键范围）来支持可序列化快照隔离。它们真的能防止由幻影引起的写偏斜吗？（好吧...实际上，我指的是 <a href="https://dgraph.io/blog/post/badger-txn/">BadgerDB</a>。）</li>
+</ul>
+<p>我们不对这些问题提供参考答案，欢迎在 Discord 社区中讨论。</p>
+<h2 id="奖励任务"><a class="header" href="#奖励任务">奖励任务</a></h2>
+<ul>
+<li><strong>只读事务。</strong> 启用可序列化后，我们需要跟踪事务的读集。</li>
+<li><strong>精度/谓词锁定。</strong> 读</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="week3-05-txn-occ.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="week3-07-compaction-filter.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="week3-05-txn-occ.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="week3-07-compaction-filter.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

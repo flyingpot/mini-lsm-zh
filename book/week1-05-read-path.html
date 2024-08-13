@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>读路径 - mini-lsm-zh</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="00-preface.html">前言</a></li><li class="chapter-item expanded affix "><a href="00-overview.html">Mini-LSM概述</a></li><li class="chapter-item expanded affix "><a href="00-get-started.html">环境设置</a></li><li class="chapter-item expanded "><a href="week1-overview.html"><strong aria-hidden="true">1.</strong> 第一周概述：Mini-LSM</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="week1-01-memtable.html"><strong aria-hidden="true">1.1.</strong> Memtable</a></li><li class="chapter-item expanded "><a href="week1-02-merge-iterator.html"><strong aria-hidden="true">1.2.</strong> 合并迭代器</a></li><li class="chapter-item expanded "><a href="week1-03-block.html"><strong aria-hidden="true">1.3.</strong> 块</a></li><li class="chapter-item expanded "><a href="week1-04-sst.html"><strong aria-hidden="true">1.4.</strong> 排序字符串表（SST）</a></li><li class="chapter-item expanded "><a href="week1-05-read-path.html" class="active"><strong aria-hidden="true">1.5.</strong> 读路径</a></li><li class="chapter-item expanded "><a href="week1-06-write-path.html"><strong aria-hidden="true">1.6.</strong> 写路径</a></li><li class="chapter-item expanded "><a href="week1-07-sst-optimizations.html"><strong aria-hidden="true">1.7.</strong> 小贴士：SST优化</a></li></ol></li><li class="chapter-item expanded "><a href="week2-overview.html"><strong aria-hidden="true">2.</strong> 第二周概述：压缩与持久化</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="week2-01-compaction.html"><strong aria-hidden="true">2.1.</strong> 压缩实现</a></li><li class="chapter-item expanded "><a href="week2-02-simple.html"><strong aria-hidden="true">2.2.</strong> 简单压缩策略</a></li><li class="chapter-item expanded "><a href="week2-03-tiered.html"><strong aria-hidden="true">2.3.</strong> 分层压缩策略</a></li><li class="chapter-item expanded "><a href="week2-04-leveled.html"><strong aria-hidden="true">2.4.</strong> 层级压缩策略</a></li><li class="chapter-item expanded "><a href="week2-05-manifest.html"><strong aria-hidden="true">2.5.</strong> 清单</a></li><li class="chapter-item expanded "><a href="week2-06-wal.html"><strong aria-hidden="true">2.6.</strong> 预写日志（WAL）</a></li><li class="chapter-item expanded "><a href="week2-07-snacks.html"><strong aria-hidden="true">2.7.</strong> 小贴士：批量写入与校验和</a></li></ol></li><li class="chapter-item expanded "><a href="week3-overview.html"><strong aria-hidden="true">3.</strong> 第三周概述：MVCC</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="week3-01-ts-key-refactor.html"><strong aria-hidden="true">3.1.</strong> 时间戳编码 + 重构</a></li><li class="chapter-item expanded "><a href="week3-02-snapshot-read-part-1.html"><strong aria-hidden="true">3.2.</strong> 快照 - Memtables与时间戳</a></li><li class="chapter-item expanded "><a href="week3-03-snapshot-read-part-2.html"><strong aria-hidden="true">3.3.</strong> 快照 - 事务API</a></li><li class="chapter-item expanded "><a href="week3-04-watermark.html"><strong aria-hidden="true">3.4.</strong> 水印与GC</a></li><li class="chapter-item expanded "><a href="week3-05-txn-occ.html"><strong aria-hidden="true">3.5.</strong> 事务与OCC</a></li><li class="chapter-item expanded "><a href="week3-06-serializable.html"><strong aria-hidden="true">3.6.</strong> 可序列化快照隔离</a></li><li class="chapter-item expanded "><a href="week3-07-compaction-filter.html"><strong aria-hidden="true">3.7.</strong> 小贴士：压缩过滤器</a></li></ol></li><li class="chapter-item expanded "><a href="week4-overview.html"><strong aria-hidden="true">4.</strong> 余生（待定）</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">已废弃的Mini-LSM v1</li><li class="chapter-item expanded "><a href="00-v1.html"><strong aria-hidden="true">5.</strong> 概述</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-block.html"><strong aria-hidden="true">5.1.</strong> 在小块中存储键值对</a></li><li class="chapter-item expanded "><a href="02-sst.html"><strong aria-hidden="true">5.2.</strong> 并将其制成SST</a></li><li class="chapter-item expanded "><a href="03-memtable.html"><strong aria-hidden="true">5.3.</strong> 现在是时候合并所有内容了</a></li><li class="chapter-item expanded "><a href="04-engine.html"><strong aria-hidden="true">5.4.</strong> 引擎启动</a></li><li class="chapter-item expanded "><a href="05-compaction.html"><strong aria-hidden="true">5.5.</strong> 让我们在后台做些什么</a></li><li class="chapter-item expanded "><a href="06-recovery.html"><strong aria-hidden="true">5.6.</strong> 系统崩溃时要小心</a></li><li class="chapter-item expanded "><a href="07-bloom-filter.html"><strong aria-hidden="true">5.7.</strong> 一个好的布隆过滤器让生活更轻松</a></li><li class="chapter-item expanded "><a href="08-key-compression.html"><strong aria-hidden="true">5.8.</strong> 节省一些空间，希望如此</a></li><li class="chapter-item expanded "><a href="09-whats-next.html"><strong aria-hidden="true">5.9.</strong> 下一步是什么</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">mini-lsm-zh</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="读取路径"><a class="header" href="#读取路径">读取路径</a></h1>
+<p><img src="./lsm-tutorial/week1-05-overview.svg" alt="章节概览" /></p>
+<p>在本章中，您将：</p>
+<ul>
+<li>将 SST 集成到 LSM 读取路径中。</li>
+<li>使用 SST 实现 LSM 读取路径的 <code>get</code> 方法。</li>
+<li>使用 SST 实现 LSM 读取路径的 <code>scan</code> 方法。</li>
+</ul>
+<p>要复制测试用例到起始代码并运行它们，</p>
+<pre><code>cargo x copy-test --week 1 --day 5
+cargo x scheck
+</code></pre>
+<h2 id="任务-1双合并迭代器"><a class="header" href="#任务-1双合并迭代器">任务 1：双合并迭代器</a></h2>
+<p>在此任务中，您需要修改：</p>
+<pre><code>src/iterators/two_merge_iterator.rs
+</code></pre>
+<p>您已经实现了一个合并迭代器，该迭代器合并相同类型的迭代器（即 memtable 迭代器）。现在我们已经实现了 SST 格式，我们既有磁盘上的 SST 结构，也有内存中的 memtable。当我们从存储引擎扫描时，我们需要将来自 memtable 迭代器和 SST 迭代器的数据合并到一个迭代器中。在这种情况下，我们需要一个 <code>TwoMergeIterator</code>，它可以合并两种不同类型的迭代器。</p>
+<p>您可以在 <code>two_merge_iter.rs</code> 中实现 <code>TwoMergeIterator</code>。由于这里只有两个迭代器，我们不需要维护一个二叉堆。相反，我们可以简单地使用一个标志来指示从哪个迭代器读取。与 <code>MergeIterator</code> 类似，如果两个迭代器中都找到了相同的键，则第一个迭代器优先。</p>
+<h2 id="任务-2读取路径---扫描"><a class="header" href="#任务-2读取路径---扫描">任务 2：读取路径 - 扫描</a></h2>
+<p>在此任务中，您需要修改：</p>
+<pre><code>src/lsm_iterator.rs
+src/lsm_storage.rs
+</code></pre>
+<p>在实现 <code>TwoMergeIterator</code> 之后，我们可以将 <code>LsmIteratorInner</code> 的类型改为：</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type LsmIteratorInner =
+    TwoMergeIterator, MergeIterator&gt;;
+<span class="boring">}</span></code></pre></pre>
+<p>这样，LSM 存储引擎的内部迭代器将是一个结合了 memtable 和 SST 数据的迭代器。</p>
+<p>请注意，我们的 SST 迭代器不支持传递结束边界。因此，您需要在 <code>LsmIterator</code> 中手动处理 <code>end_bound</code>。您需要修改 <code>LsmIterator</code> 逻辑，当内部迭代器的键达到结束边界时停止。</p>
+<p>我们的测试用例将在 <code>l0_sstables</code> 中生成一些 memtable 和 SST，您需要在本任务中正确扫描所有这些数据。在下一章之前，您不需要刷新 SST。因此，您可以继续修改 <code>LsmStorageInner::scan</code> 接口，创建一个合并迭代器遍历所有 memtable 和 SST，以完成存储引擎的读取路径。</p>
+<p>因为 <code>SsTableIterator::create</code> 涉及 I/O 操作，可能较慢，我们不希望在 <code>state</code> 关键部分执行此操作。因此，您应该首先读取 <code>state</code> 并克隆 LSM 状态快照的 <code>Arc</code>。然后，您应该释放锁。之后，您可以遍历所有 L0 SST，为每个 SST 创建迭代器，然后创建一个合并迭代器来检索数据。</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn scan(&amp;self) {
+    let snapshot = {
+        let guard = self.state.read();
+        Arc::clone(&amp;guard)
+    };
+    // 创建迭代器并定位它们
+}
+<span class="boring">}</span></code></pre></pre>
+<p>在 LSM 存储状态中，我们仅在 <code>l0_sstables</code> 向量中存储 SST id。您需要从 <code>sstables</code> 哈希映射中检索实际的 SST 对象。</p>
+<h2 id="任务-3读取路径---get"><a class="header" href="#任务-3读取路径---get">任务 3：读取路径 - Get</a></h2>
+<p>在此任务中，您需要修改：</p>
+<pre><code>src/lsm_storage.rs
+</code></pre>
+<p>对于 get 请求，它将作为在 memtable 中的查找，然后在 SST 上进行扫描。您可以在所有 SST 上创建一个合并迭代器，并在用户要查找的键上进行定位。定位有两种可能性：键与用户查找的相同，或者键不同/不存在。只有在键存在且与查找的键相同时，才应将值返回给用户。您还应减少状态锁的关键部分，如前一节所述。同时记得处理已删除的键。</p>
+<h2 id="测试您的理解"><a class="header" href="#测试您的理解">测试您的理解</a></h2>
+<ul>
+<li>考虑用户有一个迭代器遍历整个存储引擎的情况，存储引擎大小为 1TB，因此扫描所有数据大约需要 1 小时。如果用户这样做会有什么问题？（这是一个很好的问题，我们将在教程的不同阶段多次询问它...）</li>
+<li>一些 LSM 树存储引擎提供的另一个流行接口是 multi-get（或 vectored get）。用户可以传递他们想要检索的键列表。接口返回每个键的值。例如，<code>multi_get(vec!["a", "b", "c", "d"]) -&gt; a=1,b=2,c=3,d=4</code>。显然，一个简单的实现是对每个键进行单个 get。您将如何实现 multi-get 接口，以及您可以进行哪些优化以使其更高效？（提示：在 get 过程中的一些操作只需要对所有键执行一次，除此之外，您可以考虑改进磁盘 I/O 接口以更好地支持此 multi-get 接口）。</li>
+</ul>
+<p>我们没有提供这些问题的参考答案，欢迎在 Discord 社区中讨论。</p>
+<h2 id="额外任务"><a class="header" href="#额外任务">额外任务</a></h2>
+<ul>
+<li><strong>动态分派的代价。</strong> 实现一个 <code>Box</code> 版本的合并迭代器，并进行基准测试以查看性能差异。</li>
+<li><strong>并行定位。</strong> 创建合并迭代器需要加载所有底层 SST 的第一个块（当您创建 <code>SSTIterator</code> 时）。您可以并行化创建迭代器的过程。</li>
+</ul>
+<p>我们非常欢迎您的反馈。欢迎加入我们的Discord社区。发现问题？请在github.com/skyzh/mini-lsm上创建问题/拉取请求。版权所有 © 2022 - 2024 Alex Chi Z. 保留所有权利。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="week1-04-sst.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="week1-06-write-path.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="week1-04-sst.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="week1-06-write-path.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

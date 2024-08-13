@@ -1,0 +1,6 @@
+[book]
+authors = ["flyingpot"]
+language = "zh"
+multilingual = false
+src = "src"
+title = "mini-lsm-zh"
